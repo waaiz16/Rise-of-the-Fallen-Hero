@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shadow Street: Rise of the Fallen Hero</title>
+    <style>
+        body { margin: 0; overflow: hidden; background-color: #000; font-family: 'Courier New', Courier, monospace; color: #fff; }
+        #canvas-container { width: 100vw; height: 100vh; }
+        #ui-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
+        
+        .hud { position: absolute; padding: 20px; width: calc(100% - 40px); display: none; }
+        .stats { top: 0; left: 0; display: flex; justify-content: space-between; font-size: 24px; text-shadow: 2px 2px #000; }
+        #timer-container { top: 10px; left: 50%; transform: translateX(-50%); font-size: 40px; color: #ff4444; }
+        
+        #crosshair { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 20px; height: 20px; border: 2px solid rgba(0, 255, 255, 0.5); border-radius: 50%; display: none; }
+        #crosshair::after { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 4px; height: 4px; background: cyan; border-radius: 50%; }
+
+        .screen-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; background: rgba(0,0,0,0.8); pointer-events: all; transition: opacity 0.5s; }
+        .clue-card { background: #222; border: 2px solid #4af; padding: 30px; border-radius: 10px; display: none; text-align: center; }
+        .clue-text { font-size: 32px; margin-bottom: 20px; color: #4af; }
+        
+        #game-over, #victory { display: none; }
+        #game-over h1 { color: #f00; font-size: 60px; }
+        #victory h1 { color: #0fa; font-size: 60px; }
+        
+        button { background: #444; color: #fff; border: 1px solid #777; padding: 15px 30px; font-size: 20px; cursor: pointer; margin-top: 20px; }
+        button:hover { background: #666; }
+
+        #flash { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: red; opacity: 0; pointer-events: none; }
+        #loading { display: flex; z-index: 100; }
+        #health-bar-container { position: absolute; bottom: 30px; left: 30px; width: 300px; height: 20px; border: 2px solid #fff; background: #200; }
+        #health-inner { width: 100%; height: 100%; background: #f44; transition: width 0.3s; }
+        #tutorial-info { position: absolute; bottom: 30px; right: 30px; background: rgba(0,0,0,0.7); padding: 15px; border-left: 5px solid cyan; display: none; }
+    </style>
+</head>
+<body>
+    <div id="canvas-container"></div>
+    <div id="ui-layer">
+        <div id="flash"></div>
+        
+        <div id="loading" class="screen-overlay">
+            <h1>SHADOW STREET</h1>
+            <p>Rise of the Fallen Hero</p>
+            <button id="start-btn">ENTER THE DARKNESS</button>
+        </div>
+
+        <div id="hud-main" class="hud stats">
+            <div id="score">SCORE: 0</div>
+            <div id="ammo">AMMO: 30 / ∞</div>
+        </div>
+
+        <div id="timer-container" class="hud">00:00</div>
+
+        <div id="health-bar-container" class="hud">
+            <div id="health-inner"></div>
+        </div>
+
+        <div id="tutorial-info">
+            [WASD] Move | [SPACE] Jump | [SHIFT] Sprint<br>
+            [LMB] Shoot | [E] Interact
+        </div>
+
+        <div id="clue-popup" class="screen-overlay" style="display: none; background: rgba(0,0,0,0.6);">
+            <div class="clue-card" id="card-inner" style="display: block;">
+                <h2>CLUE DISCOVERED</h2>
+                <div class="clue-text" id="clue-word">????</div>
+                <p>Find the house labeled with this word.<br>Choosing wrong means certain death.</p>
+                <button id="close-clue">UNDERSTOOD</button>
+            </div>
+        </div>
+
+        <div id="crosshair"></div>
+
+        <div id="game-over" class="screen-overlay">
+            <h1>DARKNESS CONSUMED YOU</h1>
+            <p id="final-score-lose">Score: 0</p>
+            <button onclick="location.reload()">RETRY</button>
+        </div>
+
+        <div id="victory" class="screen-overlay">
+            <h1>HERO RISEN</h1>
+            <p>The Shadow has been banished.</p>
+            <p id="final-score-win">Score: 0</p>
+            <button onclick="location.reload()">PLAY AGAIN</button>
+        </div>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+</body>
+</html>
